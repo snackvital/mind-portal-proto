@@ -12,8 +12,13 @@
       text-align: center;
       padding: 30px;
     }
-    h1 { font-size: 28px; margin-bottom: 10px; }
-    p { opacity: 0.8; }
+    h1 {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+    p {
+      opacity: 0.8;
+    }
     textarea {
       width: 90%;
       height: 120px;
@@ -22,6 +27,7 @@
       padding: 10px;
       font-size: 16px;
       margin: 15px 0;
+      resize: none;
     }
     button {
       background: #00b4d8;
@@ -31,6 +37,7 @@
       border-radius: 10px;
       font-size: 16px;
       cursor: pointer;
+      margin: 5px;
     }
     button:hover {
       background: #0096c7;
@@ -53,11 +60,13 @@
   
   <textarea id="ideaInput" placeholder="Ex : Et si le silence avait une couleur..."></textarea>
   <br>
-  <button onclick="saveIdea()">💾 Sauvegarder l'idée</button>
+  <button onclick="saveIdea()">💾 Sauvegarder</button>
+  <button onclick="shareIdea()">📤 Partager sur WhatsApp</button>
 
   <div id="ideas"></div>
 
   <script>
+    // Fonction : Sauvegarder l'idée localement
     function saveIdea() {
       const idea = document.getElementById('ideaInput').value.trim();
       if (idea === "") return alert("Écris d’abord ton idée.");
@@ -70,14 +79,31 @@
       showIdeas();
     }
 
+    // Fonction : Afficher les idées sauvegardées
     function showIdeas() {
       const list = document.getElementById('ideas');
       const stored = JSON.parse(localStorage.getItem("ideas")) || [];
-      list.innerHTML = "<h3>🧾 Tes idées sauvegardées :</h3>" + stored.map(
-        i => `<div class='idea'><b>${i.date}</b><br>${i.text}</div>`
-      ).join("");
+      if (stored.length === 0) {
+        list.innerHTML = "<p>Aucune idée sauvegardée pour l’instant.</p>";
+      } else {
+        list.innerHTML = "<h3>🧾 Tes idées sauvegardées :</h3>" + stored.map(
+          i => `<div class='idea'><b>${i.date}</b><br>${i.text}</div>`
+        ).join("");
+      }
     }
 
+    // Fonction : Partager sur WhatsApp
+    function shareIdea() {
+      const idea = document.getElementById('ideaInput').value.trim();
+      if (idea === "") return alert("Écris ton idée avant de la partager.");
+
+      const encoded = encodeURIComponent("💡 Nouvelle idée Mind Portal : " + idea);
+      const phone = "226XXXXXXXXX"; // 👈 Mets ici ton numéro WhatsApp (ex : 22670000000)
+      const link = `https://wa.me/${phone}?text=${encoded}`;
+      window.open(link, "_blank");
+    }
+
+    // Affiche automatiquement les idées existantes
     showIdeas();
   </script>
 </body>
