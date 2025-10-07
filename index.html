@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mind Portal</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #000428, #004e92);
+      color: white;
+      text-align: center;
+      padding: 30px;
+    }
+    h1 { font-size: 28px; margin-bottom: 10px; }
+    p { opacity: 0.8; }
+    textarea {
+      width: 90%;
+      height: 120px;
+      border-radius: 10px;
+      border: none;
+      padding: 10px;
+      font-size: 16px;
+      margin: 15px 0;
+    }
+    button {
+      background: #00b4d8;
+      border: none;
+      color: white;
+      padding: 12px 25px;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0096c7;
+    }
+    #ideas {
+      margin-top: 25px;
+      text-align: left;
+    }
+    .idea {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧠 Mind Portal</h1>
+  <p>Transforme tes pensées en opportunités. Écris ici ton idée du jour 👇</p>
+  
+  <textarea id="ideaInput" placeholder="Ex : Et si le silence avait une couleur..."></textarea>
+  <br>
+  <button onclick="saveIdea()">💾 Sauvegarder l'idée</button>
+
+  <div id="ideas"></div>
+
+  <script>
+    function saveIdea() {
+      const idea = document.getElementById('ideaInput').value.trim();
+      if (idea === "") return alert("Écris d’abord ton idée.");
+      
+      let stored = JSON.parse(localStorage.getItem("ideas")) || [];
+      stored.unshift({text: idea, date: new Date().toLocaleString()});
+      localStorage.setItem("ideas", JSON.stringify(stored));
+      
+      document.getElementById('ideaInput').value = "";
+      showIdeas();
+    }
+
+    function showIdeas() {
+      const list = document.getElementById('ideas');
+      const stored = JSON.parse(localStorage.getItem("ideas")) || [];
+      list.innerHTML = "<h3>🧾 Tes idées sauvegardées :</h3>" + stored.map(
+        i => `<div class='idea'><b>${i.date}</b><br>${i.text}</div>`
+      ).join("");
+    }
+
+    showIdeas();
+  </script>
+</body>
+</html>
